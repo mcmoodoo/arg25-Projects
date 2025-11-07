@@ -12,8 +12,8 @@ ZK Gaming Protocol
 ## Team
 
 - Dream Team
-- mcmoodoo, LeeMarreros, kavehtehrani
-- Defiant, LeeMarreros, kwar13
+- mcmoodoo, fengshanshan, kavehtehrani
+- Defiant, shanshan33, kwar13
 
 ## Project Description
 
