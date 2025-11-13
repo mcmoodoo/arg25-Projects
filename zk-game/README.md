@@ -30,20 +30,17 @@ The project includes two game modes:
 
 ### Game Flow
 
-- **Player 1** creates a game by committing their move (`keccak256(move || salt)`) and optionally escrowing tokens (in degen mode).
+- **Player 1** creates a game by committing their move (`keccak256(move || salt)`) with a zk proof and optionally escrowing tokens (in degen mode).
 - **Player 2** joins any open game by submitting their move directly (no commitment needed) and matching the stake (in degen mode).
-- Once matched, **Player 1** reveals their move plus salt along with a Noir-generated ZK proof that the outcome was computed correctly.
+- Once matched, **Player 1** reveals the result with its original move plus salt and player2's move.
 - The contract validates the commitment, verifies the ZK proof, and pays the escrowed tokens to the winner (or slashes Player 1 if they fail to reveal before expiry).
 
 ### ZK Proof Generation Flow
 
-1. **Player 2 joins** and submits their move directly to the contract
-2. **Player 1 reveals their move** (move + salt) after Player 2 has joined
-3. **Frontend computes expected winner** using the same logic as the contract
-4. **Noir circuit executes** with both moves and winner as inputs
-5. **Barretenberg backend generates a proof** proving the computation is correct
-6. **Proof is verified locally** before sending to contract
-7. **Proof is sent to contract** via `resolveGame()` for on-chain verification
+1. **Player 1 create the game** and committing it's move (`keccak256(move || salt)`) with a zk proof via Noir circuit
+2. **Player 2 joins** and submits their move directly to the contract
+3. **Player 1 reveals their move** with original (move + salt) and player2's move to reveal who wins the game
+
 
 ## Tech Stack
 
