@@ -1,5 +1,3 @@
-**PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
-
 # ARG25 Project Submission Template
 
 Welcome to Invisible Garden- ARG25.
@@ -9,7 +7,7 @@ You’ll update your progress weekly **in the same PR**, so mentors and reviewer
 
 ## Project Title
 
-ZK Rock Paper Scissors
+Zero-knowledge implementation of Rock Paper Scissors
 
 ## Team
 
@@ -19,7 +17,8 @@ ZK Rock Paper Scissors
 
 ## Project Description
 
-**PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
+🗒️ **PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs \
+📼 **DEMO VIDEO**: https://youtu.be/WvKBrJiDE2w
 
 A zero-knowledge implementation of the classic rock-paper-scissors game where Player 1 creates a game by committing it's move (`keccak256(move || salt)`) with a zk proof, Player 2 joins with their move directly, and Player 1 reveals with ZK proofs to resolve the game on-chain.
 
@@ -47,7 +46,7 @@ The project includes two game modes:
 ### Zero-Knowledge
 
 - **Noir**: ZK circuit language for game logic verification
-- **Barretenberg**: ZK proof generation backend (via `@aztec/bb.js`)
+- **Barretenberg**: ZK proof generation backend 
 - **Noir.js**: JavaScript bindings for Noir circuit execution
 
 ### Smart Contracts
@@ -62,7 +61,6 @@ The project includes two game modes:
 - **Vite**: Build tool and dev server
 - **Ethers.js** v6: Ethereum interaction library
 - **Tailwind CSS**: Styling framework
-- **Vanilla JavaScript**: No framework dependencies
 
 ### Development Tools
 
@@ -84,32 +82,6 @@ The project includes two game modes:
 
 6. **Handle edge cases**: Implement timeout mechanisms, refund logic, and tie handling for robust game operation.
 
-## Project Structure
-
-The `zk-ogs` repository is organized as follows:
-
-```
-zk-ogs/
-├── circuit/              # Noir ZK circuit for game logic verification
-│   ├── src/main.nr      # Main circuit logic (winner determination)
-│   └── Nargo.toml       # Noir project configuration
-├── degen-rps/           # Smart contracts (Foundry project)
-│   ├── src/
-│   │   ├── DegenRPS.sol        # Main betting game contract
-│   │   ├── RockPaperScissors.sol  # Basic game contract
-│   │   └── Verifier.sol         # ZK proof verifier interface
-│   ├── test/            # Contract tests
-│   └── script/          # Deployment scripts
-├── frontend/            # Web application
-│   ├── index.html       # Basic RPS game page
-│   ├── swap-rps.html    # Degen RPS game page
-│   ├── fund.html        # Token faucet page
-│   ├── game/            # Game logic modules
-│   ├── utils/           # Utility functions (proof generation, etc.)
-│   └── config/          # Configuration files
-└── README.md            # Detailed project documentation
-```
-
 ### Key Components
 
 - **Circuit** (`circuit/src/main.nr`): Noir circuit that verifies the winner determination logic. Takes both player moves and the expected winner as inputs, proving the computation is correct.
@@ -122,9 +94,13 @@ zk-ogs/
 
 _What did you learn or improve during ARG25?_
 
+Zero-knowledge implementation of a classic commit-reveal scheme. The main improvement over a commit-reveal scheme is knowing that ZK guarantees a valid move has been made. After making this game, we've concluded that ZK really shines in multi-round games (e.g. battleship) where the information is being incrementally revealed. ZK guarantees that opponent cannot cheat mid-game and every move is valid without revealing anything. For instance in a classic commit-reveal you would only know whether your opponent cheated or not at the end. ZK guarantees that each move is valid given that each attack will be run through a board that cannot change throughout the game. 
+
 ## Next Steps
 
 _If you plan to continue development beyond ARG25, what’s next?_
+
+We started implementing a 'degen' version of this to integrate with uniswap v4 to make part of a submitted trade a chance based outcome based on the zk-rps game here. More information is under "future work" in the project's repo.
 
 _This template is part of the [ARG25 Projects Repository](https://github.com/invisible-garden/arg25-projects)._  
 _Update this file weekly by committing and pushing to your fork, then raising a PR at the end of each week._
