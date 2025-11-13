@@ -23,9 +23,7 @@ ZK Rock Paper Scissors Game | Degen Edition
 
 A zero-knowledge implementation of the classic rock-paper-scissors game where Player 1 commits their move, Player 2 joins with their move directly, and Player 1 reveals with ZK proofs to resolve the game on-chain.
 
-The project includes two game modes:
-
-- **Basic RPS** (`/`): A simple rock-paper-scissors game where players commit and reveal moves using ZK proofs. No token betting required.
+The project includes the following game models:
 - **Degen RPS** (`/swap-rps`): A token-betting version where players stake tokens on each game. The winner takes the escrowed tokens.
 
 ### Game Flow
