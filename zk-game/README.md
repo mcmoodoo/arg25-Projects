@@ -21,7 +21,7 @@ ZK Rock Paper Scissors
 
 **PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
 
-A zero-knowledge implementation of the classic rock-paper-scissors game where Player 1 commits their move, Player 2 joins with their move directly, and Player 1 reveals with ZK proofs to resolve the game on-chain.
+A zero-knowledge implementation of the classic rock-paper-scissors game where Player 1 creates a game by committing it's move (`keccak256(move || salt)`) with a zk proof, Player 2 joins with their move directly, and Player 1 reveals with ZK proofs to resolve the game on-chain.
 
 The project includes two game modes:
 
@@ -30,7 +30,7 @@ The project includes two game modes:
 
 ### Game Flow
 
-- **Player 1** creates a game by committing their move (`keccak256(move || salt)`) with a zk proof and optionally escrowing tokens (in degen mode).
+- **Player 1** creates a game by committing it's move (`keccak256(move || salt)`) with a zk proof and optionally escrowing tokens (in degen mode).
 - **Player 2** joins any open game by submitting their move directly (no commitment needed) and matching the stake (in degen mode).
 - Once matched, **Player 1** reveals the result with its original move plus salt and player2's move.
 - The contract validates the commitment, verifies the ZK proof, and pays the escrowed tokens to the winner (or slashes Player 1 if they fail to reveal before expiry).
