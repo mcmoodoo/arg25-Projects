@@ -10,12 +10,17 @@ You'll update your progress weekly **in the same PR**, so mentors and reviewers 
 ##  Project Title
 ZK Rock Paper Scissors Game | Degen Edition
 
+**PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
+
 ## Team
 - Team/Individual Name: Dream Team
 - GitHub Handles: @mcmoodoo
 - Devfolio Handles: 
 
 ## Project Description
+
+**PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
+
 A zero-knowledge implementation of the classic rock-paper-scissors game where Player 1 commits their move, Player 2 joins with their move directly, and Player 1 reveals with ZK proofs to resolve the game on-chain.
 
 The project includes two game modes:
