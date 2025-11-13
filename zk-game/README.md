@@ -1,108 +1,156 @@
 **PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
 
-# ARG25 Project Submission Template
+# ZK Rock Paper Scissors Game | Degen Edition
 
-Welcome to Invisible Garden- ARG25.
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![Solidity 0.8.20](https://img.shields.io/badge/Solidity-0.8.20-363636?logo=solidity)
+![Hardhat 3](https://img.shields.io/badge/Hardhat-3.0-fff100?logo=hardhat&logoColor=black) ![Noir](https://img.shields.io/badge/Noir-ZK-black?logo=aztec&labelColor=000000)
+![Vite](https://img.shields.io/badge/Vite-4.x-646CFF?logo=vite)
+![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-339933?logo=node.js)
 
-Each participant or team will maintain this README throughout the program.  
-You’ll update your progress weekly **in the same PR**, so mentors and reviewers can track your journey end-to-end.
+A zero-knowledge implementation of the classic rock-paper-scissors game where Player 1 commits their move, Player 2 joins with their move directly, and Player 1 reveals with ZK proofs to resolve the game on-chain.
 
-## Project Title
-
-ZK Gaming Protocol
-
-## Team
-
-- Dream Team
-- mcmoodoo, fengshanshan, kavehtehrani
-- Defiant, shanshan33, kwar13
-
-## Project Description
+## Overview
 
 **PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
 
-We're building the permissionless protocol for provably fair two-player games, starting with Rock-Paper-Scissors and expanding to support any hidden-information game through ZK proofs and shared relayer infrastructure.
+The project includes two game modes:
 
-**The Problem:**
+- **Basic RPS** (`/`): A simple rock-paper-scissors game where players commit and reveal moves using ZK proofs. No token betting required.
+- **Degen RPS** (`/swap-rps`): A token-betting version where players stake tokens on each game. The winner takes the escrowed tokens.
 
-- **Centralized gaming:** Great UX but requires trust (house could cheat, custody risk)
-- **Existing crypto solutions:** Trustless but terrible UX (2-3 transactions per game, $10-30 gas, 60+ second waits)
-- **Gap:** Players want both trustless guarantees AND instant gameplay
+![screenshot](./public/images/screenshot.png)
 
-**Our Solution:**
-Combine zero-knowledge cryptography (hide moves) with off-chain relayers (batch transactions) to deliver one-click, trustless gaming. Players click once, ZK proofs are generated in the browser, relayers coordinate off-chain, and settlement happens atomically on-chain. Result: 1 click per player, 30-40 seconds total, $0 gas for users.
+### Game Flow
 
-**Vision:**
-We're not just building a game—we're building the infrastructure layer for ALL two-player hidden-information games. Like Uniswap for DeFi or OpenSea for NFTs, we're creating the protocol that becomes the default gaming infrastructure in crypto.
+- **Player 1** creates a game by committing their move (`keccak256(move || salt)`) and optionally escrowing tokens (in degen mode).
+- **Player 2** joins any open game by submitting their move directly (no commitment needed) and matching the stake (in degen mode).
+- Once matched, **Player 1** reveals their move plus salt along with a Noir-generated ZK proof that the outcome was computed correctly.
+- The contract validates the commitment, verifies the ZK proof, and pays the escrowed tokens to the winner (or slashes Player 1 if they fail to reveal before expiry).
 
-🏗️ **[View System Architecture →](./assets/system-architecture.md)**
+### Frontend Pages
 
-## Tech Stack
+1. **`/` (Basic RPS)**: Simple rock-paper-scissors game interface
+2. **`/swap-rps` (Degen RPS)**: Token-betting version
+3. **`/fund`**: Token faucet for testnet tokens
 
-**Zero-Knowledge Proofs:**
+### ZK Proof Generation Flow
 
-- Groth16 / Plonky2 (ZK proof systems for move validation)
-- Browser-based proof generation (~3 seconds, ~200 bytes proofs)
+1. **Player 2 joins** and submits their move directly to the contract
+2. **Player 1 reveals their move** (move + salt) after Player 2 has joined
+3. **Frontend computes expected winner** using the same logic as the contract
+4. **Noir circuit executes** with both moves and winner as inputs
+5. **Barretenberg backend generates a proof** proving the computation is correct
+6. **Proof is verified locally** before sending to contract
+7. **Proof is sent to contract** via `resolveGame()` (on-chain verification pending)
 
-**Smart Contracts:**
+## Game Flow
 
-- Solidity (EVM-compatible chains)
-- Proof verification, game logic, escrow system
-- Atomic settlement mechanism
+```
+Player 1                  Contract                   Player 2
+   |                         |                          |
+   |-- createGame(commit) -->|                          |
+   |   (move + salt)         |                          |
+   |                         |<-- joinGame(move) -------|
+   |                         |    (stored on-chain)     |
+   |                         |                          |
+   |-- resolveGame(move,salt)|                          |
+   |   + player2 move ------>|                          |
+   |                         |-- GameResolved event --> |
+   |                         |                          |
+```
 
-**Off-Chain Infrastructure:**
+## Setup
 
-- Relayer network (permissionless, economically secured)
-- Off-chain coordination and batching
-- Public relayer network (stake-based)
+### Prerequisites
 
-**User Interface:**
+- **Node.js** 18+ and npm
+- **Noir** ([install instructions](https://noir-lang.org/docs/getting_started/nargo_installation))
+- **MetaMask** (for wallet connection)
 
-- Web-based interface (one-click gameplay)
-- Real-time game matching
-- Escrow management dashboard
+### 1. Install Dependencies
 
-**Other:**
+```bash
+# Circuit dependencies (Noir comes with nargo)
+cd circuit
+nargo --version  # Verify installation
 
-- USDC/ERC20 for betting and escrow
-- Developer SDK for game creation (Phase 2)
-- Game registry smart contracts (Phase 2)
+# Contract dependencies
+cd ../contracts
+npm install
 
-## Objectives
+# Frontend dependencies
+cd ../frontend
+npm install
+```
 
-By the end of ARG25, we aim to achieve:
+### 2. Compile Circuit
 
-1. **Working Rock-Paper-Scissors Proof of Concept**
-   - Fully functional RPS game with ZK proof generation
-   - Browser-based one-click gameplay
-   - Working relayer coordination (off-chain matching and batching)
+```bash
+cd circuit
+nargo compile
+nargo test  # Verify all tests pass
+```
 
-2. **Core Protocol Infrastructure**
-   - Smart contracts for proof verification and game logic
-   - Escrow system (deposit once, play forever)
-   - Basic relayer implementation with economic incentives
+This generates `target/circuit.json` needed by the frontend.
 
-3. **Technical Validation**
-   - Prove ZK + relayer architecture achieves target UX (1 click per player, <40 seconds)
-   - Demonstrate cost reduction ($0 gas for users vs $20+ traditional)
-   - Validate security model (trustless, permissionless)
+### 3. Setup Frontend Artifacts
 
-4. **Foundation for Protocol Expansion**
-   - Architecture designed for multi-game support
-   - Reusable ZK circuits and smart contract patterns
-   - Documentation for future game development
+```bash
+cd frontend
 
-**Success Metric:** Launch a working RPS game that 10-50 early users can play, proving the tech works before scaling to full protocol.
+# Copy compiled circuit
+mkdir -p target
+cp ../circuit/target/circuit.json target/
 
-**ARG25 Focus:** We're starting Phase 1 during this 3-week program, building the foundation for the core protocol and RPS proof of concept.
+# Copy contract artifact (after compilation)
+cp ../contracts/artifacts/contracts/RockPaperScissors.sol/RockPaperScissors.json contract-artifact.json
+```
 
-## 🧾 Learnings
+### 4. Start Local Blockchain (Optional)
 
-_What did you learn or improve during ARG25?_
+If you want to test locally, start a Hardhat node:
 
-## Next Steps
+```bash
+cd contracts
+npx hardhat node
+```
 
-_If you plan to continue development beyond ARG25, what’s next?_
+This will start a local blockchain on `http://127.0.0.1:8545` with test accounts.
 
-_This template is part of the [ARG25 Projects Repository](https://github.com/invisible-garden/arg25-projects)._  
-_Update this file weekly by committing and pushing to your fork, then raising a PR at the end of each week._
+### 5. Deploy Contracts (Optional)
+
+If running locally, deploy the contracts to your local network:
+
+```bash
+cd contracts
+npx hardhat ignition deploy ignition/modules/RockPaperScissors.ts --network localhost
+```
+
+For the degen version:
+
+```bash
+cd degen-rps
+forge script script/Deploy.s.sol --rpc-url http://127.0.0.1:8545 --broadcast
+```
+
+Update `frontend/deployments.json` with the deployed contract addresses.
+
+### 6. Run Frontend
+
+Start the development server:
+
+```bash
+cd frontend
+npm run dev
+```
+
+## Future Work
+
+The `raffle-pool/` directory contains work-in-progress code for integrating the RPS game with a Uniswap pool. The original concept was to create a system where:
+
+- **95% of swap funds** would execute a normal Uniswap swap
+- **5% of swap funds** would be escrowed into an RPS game
+- The winner of the RPS game would take the combined 5% contributions from both players
+
+This integration is currently in development and left for future exploration. The current implementation focuses on standalone RPS games with token betting (as seen in `/swap-rps`).
