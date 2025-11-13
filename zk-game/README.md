@@ -1,21 +1,21 @@
+**PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
+
 # ARG25 Project Submission Template
 
 Welcome to Invisible Garden- ARG25.
 
 Each participant or team will maintain this README throughout the program.  
-You'll update your progress weekly **in the same PR**, so mentors and reviewers can track your journey end-to-end.
+You’ll update your progress weekly **in the same PR**, so mentors and reviewers can track your journey end-to-end.
 
+## Project Title
 
-
-##  Project Title
-ZK Rock Paper Scissors Game | Degen Edition
-
-**PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
+ZK Gaming Protocol
 
 ## Team
-- Team/Individual Name: Dream Team
-- GitHub Handles: @mcmoodoo
-- Devfolio Handles: 
+
+- Dream Team
+- mcmoodoo, fengshanshan, kavehtehrani
+- Defiant, shanshan33, kwar13
 
 ## Project Description
 
@@ -25,8 +25,8 @@ A zero-knowledge implementation of the classic rock-paper-scissors game where Pl
 
 The project includes two game modes:
 
-- **Basic RPS** (`/`): A simple rock-paper-scissors game where players commit and reveal moves using ZK proofs. No token betting required.
-- **Degen RPS** (`/swap-rps`): A token-betting version where players stake tokens on each game. The winner takes the escrowed tokens.
+- **Basic RPS**: A simple rock-paper-scissors game where players commit and reveal moves using ZK proofs. No token betting required.
+- **Degen RPS**: A token-betting version where players stake ERC20 tokens on each game. The winner takes the escrowed tokens.
 
 ### Game Flow
 
@@ -43,191 +43,91 @@ The project includes two game modes:
 4. **Noir circuit executes** with both moves and winner as inputs
 5. **Barretenberg backend generates a proof** proving the computation is correct
 6. **Proof is verified locally** before sending to contract
-7. **Proof is sent to contract** via `resolveGame()` (on-chain verification pending)
-
-```
-Player 1                  Contract                   Player 2
-   |                         |                          |
-   |-- createGame(commit) -->|                          |
-   |   (move + salt)         |                          |
-   |                         |<-- joinGame(move) -------|
-   |                         |    (stored on-chain)     |
-   |                         |                          |
-   |-- resolveGame(move,salt)|                          |
-   |   + player2 move ------>|                          |
-   |                         |-- GameResolved event --> |
-   |                         |                          |
-```
-
-
+7. **Proof is sent to contract** via `resolveGame()` for on-chain verification
 
 ## Tech Stack
-- **Solidity** 0.8.20
-- **Hardhat** 3.0
-- **Noir** (ZK circuit language)
-- **Barretenberg** (ZK proof backend)
-- **Vite** 4.x (Frontend framework)
-- **Node.js** 18+
-- **MetaMask** (Wallet integration)
 
-![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-![Solidity 0.8.20](https://img.shields.io/badge/Solidity-0.8.20-363636?logo=solidity)
-![Hardhat 3](https://img.shields.io/badge/Hardhat-3.0-fff100?logo=hardhat&logoColor=black) ![Noir](https://img.shields.io/badge/Noir-ZK-black?logo=aztec&labelColor=000000)
-![Vite](https://img.shields.io/badge/Vite-4.x-646CFF?logo=vite)
-![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-339933?logo=node.js)
+### Zero-Knowledge
 
+- **Noir**: ZK circuit language for game logic verification
+- **Barretenberg**: ZK proof generation backend (via `@aztec/bb.js`)
+- **Noir.js**: JavaScript bindings for Noir circuit execution
 
+### Smart Contracts
+
+- **Solidity** ^0.8.26
+- **Foundry**: Development framework for smart contracts
+- **OpenZeppelin Contracts**: ERC20 token handling and security patterns
+- **Solmate**: Additional utility libraries
+
+### Frontend
+
+- **Vite**: Build tool and dev server
+- **Ethers.js** v6: Ethereum interaction library
+- **Tailwind CSS**: Styling framework
+- **Vanilla JavaScript**: No framework dependencies
+
+### Development Tools
+
+- **Nargo**: Noir package manager and compiler
+- **Forge**: Foundry's testing and deployment tool
+- **MetaMask**: Wallet integration
 
 ## Objectives
-- Build a fully functional zero-knowledge rock-paper-scissors game on-chain
-- Implement two game modes: basic (no betting) and degen (token betting)
-- Demonstrate ZK proof generation and verification using Noir
-- Create a user-friendly frontend for game interaction
-- Explore integration possibilities with DeFi protocols (Uniswap pool integration - future work)
 
+1. **Implement ZK-verified game logic**: Create a Noir circuit that proves the correct winner determination in rock-paper-scissors without revealing Player 1's move until reveal phase.
 
+2. **Build secure commit-reveal mechanism**: Enable Player 1 to commit to a move without revealing it, preventing front-running and ensuring fair gameplay.
 
-## Weekly Progress
+3. **Create token-betting game mode**: Implement a "degen" version where players can stake ERC20 tokens, with winner-takes-all payouts.
 
-### Week 1 (ends Oct 31)
-**Goals:**
-- Project setup and initial architecture
-- Basic RPS game contract implementation
-- Noir circuit development for game logic
-- Frontend foundation
+4. **Develop user-friendly frontend**: Build an intuitive web interface for creating games, joining games, and generating/verifying ZK proofs.
 
-**Progress Summary:**  
-Initial project structure created with contracts, circuit, and frontend directories. Basic RPS game flow implemented with commitment scheme. Noir circuit developed for winner computation. Frontend started with Vite setup.
+5. **Ensure on-chain verification**: Design contracts that can verify ZK proofs on-chain to ensure game outcomes are correctly computed.
 
+6. **Handle edge cases**: Implement timeout mechanisms, refund logic, and tie handling for robust game operation.
 
-### Week 2 (ends Nov 7)
-**Goals:**  
-- Degen RPS mode with token betting
-- ZK proof integration in frontend
-- Contract deployment and testing
-- UI/UX improvements
- 
-**Progress Summary:**  
-Degen RPS mode implemented with token escrow functionality. Frontend integrated with Barretenberg for ZK proof generation. Contract testing completed. Frontend pages created for basic RPS, degen RPS, and token faucet.
+## Project Structure
 
+The `zk-ogs` repository is organized as follows:
 
-### 🗓️ Week 3 (ends Nov 14)
-**Goals:**  
-- Final testing and bug fixes
-- Documentation completion
-- Deployment preparation
-- Future work exploration
-
-**Progress Summary:**  
-Project completed with both game modes functional. Documentation updated. Explored future integration with Uniswap pools (raffle-pool directory contains WIP code). Main repository and deployment links finalized.
-
-
-
-## Final Wrap-Up
-_After Week 3, summarize your final state: deliverables, repo links, and outcomes._
-
-- **Main Repository Link:** https://github.com/mcmoodoo/zk-ogs
-- **Demo / Deployment Link (if any):**  
-- **Slides / Presentation (if any):**
-
-### Setup Instructions
-
-#### Prerequisites
-- **Node.js** 18+ and npm
-- **Noir** ([install instructions](https://noir-lang.org/docs/getting_started/nargo_installation))
-- **MetaMask** (for wallet connection)
-
-#### Installation
-
-```bash
-# Circuit dependencies (Noir comes with nargo)
-cd circuit
-nargo --version  # Verify installation
-
-# Contract dependencies
-cd ../contracts
-npm install
-
-# Frontend dependencies
-cd ../frontend
-npm install
+```
+zk-ogs/
+├── circuit/              # Noir ZK circuit for game logic verification
+│   ├── src/main.nr      # Main circuit logic (winner determination)
+│   └── Nargo.toml       # Noir project configuration
+├── degen-rps/           # Smart contracts (Foundry project)
+│   ├── src/
+│   │   ├── DegenRPS.sol        # Main betting game contract
+│   │   ├── RockPaperScissors.sol  # Basic game contract
+│   │   └── Verifier.sol         # ZK proof verifier interface
+│   ├── test/            # Contract tests
+│   └── script/          # Deployment scripts
+├── frontend/            # Web application
+│   ├── index.html       # Basic RPS game page
+│   ├── swap-rps.html    # Degen RPS game page
+│   ├── fund.html        # Token faucet page
+│   ├── game/            # Game logic modules
+│   ├── utils/           # Utility functions (proof generation, etc.)
+│   └── config/          # Configuration files
+└── README.md            # Detailed project documentation
 ```
 
-#### Compile Circuit
+### Key Components
 
-```bash
-cd circuit
-nargo compile
-nargo test  # Verify all tests pass
-```
+- **Circuit** (`circuit/src/main.nr`): Noir circuit that verifies the winner determination logic. Takes both player moves and the expected winner as inputs, proving the computation is correct.
 
-This generates `target/circuit.json` needed by the frontend.
+- **DegenRPS Contract** (`degen-rps/src/DegenRPS.sol`): Main smart contract implementing the token-betting game with commit-reveal scheme, timeout handling, and winner-takes-all payouts.
 
-#### Setup Frontend Artifacts
-
-```bash
-cd frontend
-
-# Copy compiled circuit
-mkdir -p target
-cp ../circuit/target/circuit.json target/
-
-# Copy contract artifact (after compilation)
-cp ../contracts/artifacts/contracts/RockPaperScissors.sol/RockPaperScissors.json contract-artifact.json
-```
-
-#### Deploy and Run
-
-```bash
-# Start local blockchain (optional)
-cd contracts
-npx hardhat node
-
-# Deploy contracts (in another terminal)
-npx hardhat ignition deploy ignition/modules/RockPaperScissors.ts --network localhost
-
-# Run frontend
-cd frontend
-npm run dev
-```
-
-### Frontend Pages
-
-1. **`/` (Basic RPS)**: Simple rock-paper-scissors game interface
-2. **`/swap-rps` (Degen RPS)**: Token-betting version
-3. **`/fund`**: Token faucet for testnet tokens
-
-### Future Work
-
-The `raffle-pool/` directory contains work-in-progress code for integrating the RPS game with a Uniswap pool. The original concept was to create a system where:
-
-- **95% of swap funds** would execute a normal Uniswap swap
-- **5% of swap funds** would be escrowed into an RPS game
-- The winner of the RPS game would take the combined 5% contributions from both players
-
-This integration is currently in development and left for future exploration. The current implementation focuses on standalone RPS games with token betting (as seen in `/swap-rps`).
-
-
+- **Frontend** (`frontend/`): Web interface built with Vite that handles wallet connection, game creation/joining, ZK proof generation using Barretenberg, and contract interaction.
 
 ## 🧾 Learnings
-- Zero-knowledge proof generation and verification using Noir
-- Barretenberg backend integration for ZK proofs
-- Commitment schemes for on-chain game mechanics
-- Solidity contract design for game state management
-- Frontend integration with ZK proof generation workflows
-- Token escrow and payout mechanisms in smart contracts
 
-
+_What did you learn or improve during ARG25?_
 
 ## Next Steps
-- Complete on-chain ZK proof verification in the contract
-- Explore Uniswap pool integration for the raffle-pool concept
-- Add more game modes or variations
-- Improve UI/UX with better game state visualization
-- Add multiplayer tournament modes
-- Optimize gas costs for game operations
 
-
+_If you plan to continue development beyond ARG25, what’s next?_
 
 _This template is part of the [ARG25 Projects Repository](https://github.com/invisible-garden/arg25-projects)._  
 _Update this file weekly by committing and pushing to your fork, then raising a PR at the end of each week._
