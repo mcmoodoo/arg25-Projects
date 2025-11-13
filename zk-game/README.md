@@ -1,3 +1,5 @@
+**PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
+
 # ARG25 Project Submission Template
 
 Welcome to Invisible Garden- ARG25.
@@ -16,6 +18,8 @@ ZK Gaming Protocol
 - Defiant, shanshan33, kwar13
 
 ## Project Description
+
+**PROJECT OPEN SOURCE REPO**: https://github.com/mcmoodoo/zk-ogs
 
 We're building the permissionless protocol for provably fair two-player games, starting with Rock-Paper-Scissors and expanding to support any hidden-information game through ZK proofs and shared relayer infrastructure.
 
