@@ -9,7 +9,7 @@ You’ll update your progress weekly **in the same PR**, so mentors and reviewer
 
 ## Project Title
 
-ZK Gaming Protocol
+ZK Rock Paper Scissors
 
 ## Team
 
